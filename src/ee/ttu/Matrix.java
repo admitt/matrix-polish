@@ -51,8 +51,19 @@ public class Matrix {
 
     @Override
     public boolean equals(Object o) {
-        return this == o || o instanceof Matrix && Arrays.equals(((Matrix) o).matrix, matrix);
-
+        if (this == o) {
+            return true;
+        }
+        double[][] thatMatrix = ((Matrix) o).matrix;
+        if (!(o instanceof Matrix) || !(thatMatrix.length == matrix.length)) {
+            return false;
+        }
+        for (int i = 0; i < matrix.length; i++) {
+            if (!Arrays.equals(thatMatrix[i], matrix[i])) {
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override
