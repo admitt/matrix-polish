@@ -12,47 +12,27 @@ public class Polish {
     public Matrix polish() {
         Matrix previous, current = m;
         int steps = 0;
-        while(true) {
-            previous = current;
-            current = new Matrix(steps % 2 == 0
-                    ? subtractRowMedians(current)
-                    : subtractColumnMedians(current));
 
-            if (previous.equals(current)) {
-                break;
-            }
-        }
+        do {
+            previous = current;
+            current = new Matrix(subtractMedians(current, steps % 2 == 0));
+        } while (!previous.equals(current));
 
         return current;
     }
 
-    private double[][] subtractColumnMedians(Matrix current) {
-        double[] medians = new double[current.columnCount()];
-        for (int i = 0; i < current.columnCount(); i++) {
-            medians[i] = median(current.getColumn(i));
+    private double[][] subtractMedians(Matrix current, boolean row) {
+        int size = row ? current.rowCount() : current.columnCount();
+        double[] medians = new double[size];
+        for (int i = 0; i < size; i++) {
+            medians[i] = median(row ? current.getRow(i) : current.getColumn(i));
         }
 
         double[][] matrix = new double[current.rowCount()][];
         for (int i = 0; i < current.rowCount(); i++) {
             matrix[i] = new double[current.columnCount()];
             for (int j = 0; j < current.columnCount(); j++) {
-                matrix[i][j] = current.getValue(i, j) - medians[j];
-            }
-        }
-        return matrix;
-    }
-
-    private double[][] subtractRowMedians(Matrix current) {
-        double[] medians = new double[current.rowCount()];
-        for (int i = 0; i < current.rowCount(); i++) {
-            medians[i] = median(current.getRow(i));
-        }
-
-        double[][] matrix = new double[current.rowCount()][];
-        for (int i = 0; i < current.rowCount(); i++) {
-            matrix[i] = new double[current.columnCount()];
-            for (int j = 0; j < current.columnCount(); j++) {
-                matrix[i][j] = current.getValue(i, j) - medians[i];
+                matrix[i][j] = current.getValue(i, j) - medians[row ? i : j];
             }
         }
         return matrix;
@@ -62,12 +42,12 @@ public class Polish {
         if (sequence.length == 0) {
             return 0.0;
         }
-        
+
         Arrays.sort(sequence);
         int middleElement = sequence.length / 2;
 
         return sequence.length % 2 == 0
-            ? (sequence[middleElement-1] + sequence[middleElement]) / 2
-            : sequence[((int) Math.floor(middleElement))];
+                ? (sequence[middleElement - 1] + sequence[middleElement]) / 2
+                : sequence[((int) Math.floor(middleElement))];
     }
 }
