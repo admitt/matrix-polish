@@ -16,6 +16,7 @@ public class Polish {
         do {
             previous = current;
             current = new Matrix(subtractMedians(current, steps % 2 == 0));
+            steps++;
         } while (!previous.equals(current));
 
         return current;

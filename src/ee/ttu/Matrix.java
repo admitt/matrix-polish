@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Matrix {
-    final double[][] matrix;
+    private final double[][] matrix;
 
     public Matrix(List<String> rows) {
         matrix = new double[rows.size()][];
